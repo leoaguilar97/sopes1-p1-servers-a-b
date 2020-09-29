@@ -14,6 +14,7 @@ RUN apk add --no-cache \
         musl-dev \
         libffi-dev
 RUN pip install --upgrade pip
+RUN pip install --upgrade Pillow
 RUN pip install --upgrade setuptools
 RUN pip install -r requirements.txt
 ADD . /var/www/

@@ -12,7 +12,11 @@ RUN apk add build-base
 RUN apk add --no-cache \
         libressl-dev \
         musl-dev \
-        libffi-dev
+        libffi-dev \
+        freetype-dev \
+        libpng-dev \
+        jpeg-dev \
+        libjpeg-turbo-dev
 RUN pip install --upgrade pip
 RUN pip install --upgrade Pillow
 RUN pip install --upgrade setuptools

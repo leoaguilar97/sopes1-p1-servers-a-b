@@ -9,6 +9,10 @@ WORKDIR /var/www/
 
 ADD ./requirements.txt /var/www/requirements.txt
 RUN apk add build-base
+RUN apk add --no-cache \
+        libressl-dev \
+        musl-dev \
+        libffi-dev
 RUN pip install --upgrade pip
 RUN pip install --upgrade setuptools
 RUN pip install -r requirements.txt

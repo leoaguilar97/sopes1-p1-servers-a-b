@@ -1,6 +1,7 @@
 import os
 from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
+import psutil
 
 application = Flask(__name__)
 
@@ -8,6 +9,8 @@ application.config["MONGO_URI"] = 'mongodb://' + os.environ['MONGODB_USERNAME'] 
 
 mongo = PyMongo(application)
 db = mongo.db
+
+psutil.cpu_percent(interval=None)
 
 @application.route('/')
 def index():
@@ -32,6 +35,27 @@ def todo():
     return jsonify(
         status=True,
         data=data
+    )
+
+@application.route('/stats')
+def todo():
+
+    stats = {
+        'cpu_freq_percpu': psutil.cpu_freq(percpu=True),
+        'cpu_freq': psutil.cpu_freq(percpu=True),
+        'cpu_stats': psutil.cpu_stats(),
+        'cpu_count_logical': psutil.cpu_count(),
+        'cpu_count_physical': psutil.cpu_count(logical=False),
+        'cpu_times_percent': psutil.cpu_times_percent(1, False),
+        'cpu_times_percent_percpu': psutil.cpu_times_percent(1, True),
+        'cpu_percent': psutil.cpu_percent(interval=None),
+        'cpu_percent_percpu': psutil.cpu_percent(interval=None, percpu=True),
+        'memory': psutil.virtual_memory()
+    }
+
+    return jsonify(
+        status=True,
+        stats=stats
     )
 
 @application.route('/todo', methods=['POST'])

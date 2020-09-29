@@ -6,7 +6,7 @@ Primer semestre del 2020
 ## SERVIDOR A Y B
 La configuración para ambos servidores es la misma, debe instalarse cualquier distribución de Linux y deben ser máquinas virtuales del proveedor de servicios de computación en la nube a su elección. 
 
-- Se solicita lo siguiente:
+## Se solicita lo siguiente:
 
 ### Módulos del Kernel
 Deben programarse dos módulos, estos consultarán el porcentaje de memoria principal (RAM) utilizado en el servidor y el porcentaje de uso de CPU.

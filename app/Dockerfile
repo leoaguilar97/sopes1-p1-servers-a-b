@@ -21,6 +21,7 @@ RUN pip install --upgrade pip
 RUN pip install --upgrade Pillow
 RUN pip install --upgrade setuptools
 RUN pip install Flask-PyMongo
+RUN pip3 install --user psutil
 RUN pip install -r requirements.txt
 ADD . /var/www/
 RUN pip install gunicorn

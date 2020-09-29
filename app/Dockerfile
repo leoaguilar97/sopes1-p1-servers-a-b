@@ -20,6 +20,7 @@ RUN apk add --no-cache \
 RUN pip install --upgrade pip
 RUN pip install --upgrade Pillow
 RUN pip install --upgrade setuptools
+RUN pip install Flask-PyMongo
 RUN pip install -r requirements.txt
 ADD . /var/www/
 RUN pip install gunicorn

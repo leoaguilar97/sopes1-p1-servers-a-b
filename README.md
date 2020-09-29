@@ -8,14 +8,14 @@ La configuración para ambos servidores es la misma, debe instalarse cualquier d
 
 - Se solicita lo siguiente:
 
-* Módulos del Kernel
+### Módulos del Kernel
 Deben programarse dos módulos, estos consultarán el porcentaje de memoria principal (RAM) utilizado en el servidor y el porcentaje de uso de CPU.
 
-* Bases de Datos
+### Bases de Datos
 Se debe implementar una base de datos NoSQL mediante un contenedor de Docker. 
 El motor de base de datos a utilizar será MongoDB.
 
-* API REST en Python
+### API REST en Python
 Se debe programar una API REST en Python, la ejecución de esta se realizará
 dentro de un contenedor de Docker.
 

@@ -16,22 +16,46 @@ psutil.cpu_percent(interval=None)
 def index():
     return jsonify(
         status=True,
-        message='Welcome to the Dockerized Flask MongoDB app!'
+        message='API FUNCIONANDO / SERVIDOR A Y B'
     )
 
-@application.route('/todo')
-def todo():
+@application.route('/stats')
+def stats():
+    memory = psutil.virtual_memory()
+
+    THRESHOLD_KB = 1024                 # KB
+    THRESHOLD_MB = 1024 * 1024          # MB
+    THRESHOLD_GB = 1024 * 1024 * 1024   # GB
+
     stats = {
         'cpu_freq_percpu': psutil.cpu_freq(percpu=True),
-        'cpu_freq': psutil.cpu_freq(percpu=True),
+        'cpu_freq': psutil.cpu_freq(percpu=False),
         'cpu_stats': psutil.cpu_stats(),
+        'cpu_load_avg': psutil.getloadavg(),
         'cpu_count_logical': psutil.cpu_count(),
         'cpu_count_physical': psutil.cpu_count(logical=False),
         'cpu_times_percent': psutil.cpu_times_percent(1, False),
         'cpu_times_percent_percpu': psutil.cpu_times_percent(1, True),
         'cpu_percent': psutil.cpu_percent(interval=None),
         'cpu_percent_percpu': psutil.cpu_percent(interval=None, percpu=True),
-        'memory': psutil.virtual_memory()
+        'memory': {
+            'total_bytes': memory.total,
+            'total_kb': memory.total / THRESHOLD_KB,
+            'total_mb': memory.total / THRESHOLD_MB,
+            'total_gb': memory.total / THRESHOLD_GB,
+
+            'available_bytes': memory.available,
+            'available_kb': memory.available / THRESHOLD_KB,
+            'available_mb': memory.available / THRESHOLD_MB,
+            'available_gb': memory.available / THRESHOLD_GB,
+
+            'percentage': memory.percent,
+    
+            'used_bytes': memory.used,
+            'used_kb': memory.used / THRESHOLD_KB,
+            'used_mb': memory.used / THRESHOLD_MB,
+            'used_gb': memory.used / THRESHOLD_GB,
+        }
     }
 
     return jsonify(
@@ -39,8 +63,8 @@ def todo():
         stats=stats
     )
 
-@application.route('/stats')
-def stats():
+@application.route('/todo')
+def todo():
     _todos = db.todo.find()
 
     item = {}

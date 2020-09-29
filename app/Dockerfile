@@ -8,6 +8,8 @@ ENV GROUP_ID=1000 \
 WORKDIR /var/www/
 
 ADD ./requirements.txt /var/www/requirements.txt
+RUN pip install --upgrade pip
+RUN pip install --upgrade setuptools
 RUN pip install -r requirements.txt
 ADD . /var/www/
 RUN pip install gunicorn

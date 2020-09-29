@@ -8,7 +8,7 @@ ENV GROUP_ID=1000 \
 WORKDIR /var/www/
 
 ADD ./requirements.txt /var/www/requirements.txt
-RUN sudo apt-get install gcc
+RUN apk add build-base
 RUN pip install --upgrade pip
 RUN pip install --upgrade setuptools
 RUN pip install -r requirements.txt

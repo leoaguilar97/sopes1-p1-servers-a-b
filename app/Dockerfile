@@ -6,7 +6,7 @@ ENV GROUP_ID=1000 \
     USER_ID=1000
 
 WORKDIR /var/www/
-
+ADD ./  /var/www
 ADD ./requirements.txt /var/www/requirements.txt
 RUN apk add build-base
 RUN apk add --no-cache \

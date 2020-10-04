@@ -1,7 +1,9 @@
 import os
+
 from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
 import psutil
+from datetime import datetime
 
 application = Flask(__name__)
 
@@ -26,7 +28,7 @@ def stats():
     THRESHOLD_KB = 1024                 # KB
     THRESHOLD_MB = 1024 * 1024          # MB
     THRESHOLD_GB = 1024 * 1024 * 1024   # GB
-
+    """
     stats = {
         'cpu_freq_percpu': psutil.cpu_freq(percpu=True),
         'cpu_freq': psutil.cpu_freq(percpu=False),
@@ -57,14 +59,20 @@ def stats():
             'used_gb': memory.used / THRESHOLD_GB,
         }
     }
+    """
+    stats = {
+        'cpu': psutil.cpu_percent(interval=None),
+        'ram': memory.percent,
+        'docs': db.todo.count()
+    }
 
     return jsonify(
         status=True,
         stats=stats
     )
 
-@application.route('/todo')
-def todo():
+@application.route('/data')
+def getData():
     _todos = db.todo.find()
 
     item = {}
@@ -72,7 +80,8 @@ def todo():
     for todo in _todos:
         item = {
             'id': str(todo['_id']),
-            'todo': todo['todo']
+            'author': todo['author'],
+            'time': todo['time']
         }
         data.append(item)
 
@@ -81,17 +90,24 @@ def todo():
         data=data
     )
 
-@application.route('/todo', methods=['POST'])
-def createTodo():
+@application.route('/data', methods=['POST'])
+def createData():
     data = request.get_json(force=True)
+    
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+
     item = {
-        'todo': data['todo']
+        'author': data['author'],
+        'sentence': data['sentence'],
+        'time': current_time
     }
+
     db.todo.insert_one(item)
 
     return jsonify(
         status=True,
-        message='To-do saved successfully!'
+        message='ok'
     ), 201
 
 if __name__ == "__main__":

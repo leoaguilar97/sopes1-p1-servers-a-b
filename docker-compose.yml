@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
     environment:
       APP_ENV: "prod"
-      APP_DEBUG: "True"
+      APP_DEBUG: "False"
       APP_PORT: 5000
       MONGODB_DATABASE: flaskdb
       MONGODB_USERNAME: user

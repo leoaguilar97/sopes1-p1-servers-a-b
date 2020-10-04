@@ -98,7 +98,7 @@ def getData():
         item = {
             'id': str(todo['_id']),
             'author': todo['author'],
-            'sentence': data['sentence'],
+            'sentence': todo['sentence'],
             'time': todo['time'],
             'js_time': todo['js_time']
         }

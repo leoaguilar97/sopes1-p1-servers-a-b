@@ -31,11 +31,11 @@ def index():
 @application.route('/stats')
 def stats():
     memory = psutil.virtual_memory()
-
+    """
     THRESHOLD_KB = 1024                 # KB
     THRESHOLD_MB = 1024 * 1024          # MB
     THRESHOLD_GB = 1024 * 1024 * 1024   # GB
-    """
+
     stats = {
         'cpu_freq_percpu': psutil.cpu_freq(percpu=True),
         'cpu_freq': psutil.cpu_freq(percpu=False),
@@ -80,7 +80,7 @@ def stats():
 
 
 @application.route('/delete')
-def getData():
+def getDelete():
     db.todo.delete_many({})
 
     return jsonify(

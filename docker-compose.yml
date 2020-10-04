@@ -17,7 +17,7 @@ services:
       MONGODB_PASSWORD: user123
       MONGODB_HOSTNAME: mongodb
     volumes:
-      - .:/var/www
+      - appdata:/var/www
     depends_on:
       - mongodb
     networks:

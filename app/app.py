@@ -4,17 +4,21 @@ from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
 import psutil
 from datetime import datetime
+import time
 from flask_cors import CORS
 
 application = Flask(__name__)
 CORS(application)
 
-application.config["MONGO_URI"] = 'mongodb://' + os.environ['MONGODB_USERNAME'] + ':' + os.environ['MONGODB_PASSWORD'] + '@' + os.environ['MONGODB_HOSTNAME'] + ':27017/' + os.environ['MONGODB_DATABASE']
+application.config["MONGO_URI"] = 'mongodb://' + os.environ['MONGODB_USERNAME'] + ':' + \
+    os.environ['MONGODB_PASSWORD'] + '@' + os.environ['MONGODB_HOSTNAME'] + \
+    ':27017/' + os.environ['MONGODB_DATABASE']
 
 mongo = PyMongo(application)
 db = mongo.db
 
 psutil.cpu_percent(interval=None)
+
 
 @application.route('/')
 def index():
@@ -22,6 +26,7 @@ def index():
         status=True,
         message='API FUNCIONANDO / SERVIDOR A Y B'
     )
+
 
 @application.route('/stats')
 def stats():
@@ -73,6 +78,16 @@ def stats():
         stats=stats
     )
 
+
+@application.route('/delete')
+def getData():
+    db.todo.delete_many({})
+
+    return jsonify(
+        status= True,
+        message= 'ok'
+    )
+
 @application.route('/data')
 def getData():
     _todos = db.todo.find()
@@ -83,7 +98,9 @@ def getData():
         item = {
             'id': str(todo['_id']),
             'author': todo['author'],
-            'time': todo['time']
+            'sentence': data['sentence'],
+            'time': todo['time'],
+            'js_time': todo['js_time']
         }
         data.append(item)
 
@@ -95,14 +112,18 @@ def getData():
 @application.route('/data', methods=['POST'])
 def createData():
     data = request.get_json(force=True)
-    
+
     now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
+    current_time = now.strftime("%d/%m/%Y %H:%M:%S")
+
+    d = datetime.datetime.utcnow()
+    for_js = int(time.mktime(d.timetuple())) * 1000
 
     item = {
         'author': data['author'],
         'sentence': data['sentence'],
-        'time': current_time
+        'time': current_time,
+        'js_time': for_js
     }
 
     db.todo.insert_one(item)
@@ -112,8 +133,10 @@ def createData():
         message='ok'
     ), 201
 
+
 if __name__ == "__main__":
     print("INICIANDO API")
     ENVIRONMENT_DEBUG = os.environ.get("APP_DEBUG", True)
     ENVIRONMENT_PORT = os.environ.get("APP_PORT", 5000)
-    application.run(host='0.0.0.0', port=ENVIRONMENT_PORT, debug=ENVIRONMENT_DEBUG)
+    application.run(host='0.0.0.0', port=ENVIRONMENT_PORT,
+                    debug=ENVIRONMENT_DEBUG)

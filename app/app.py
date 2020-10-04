@@ -116,7 +116,7 @@ def createData():
     now = datetime.now()
     current_time = now.strftime("%d/%m/%Y %H:%M:%S")
 
-    d = datetime.datetime.utcnow()
+    d = datetime.utcnow()
     for_js = int(time.mktime(d.timetuple())) * 1000
 
     item = {

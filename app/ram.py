@@ -13,12 +13,12 @@ def get_ram_percentage():
         numbers = number_finder.findall(file_content)
 
         mtotal = int(numbers[0])
-        mused = int(numbers[1])
+        mused = int(numbers[2])
 
         print("MEMORIA TOTAL (bytes): " + str(mtotal))
-        print("MEMORIA USADA (bytes): " + str(mused))
+        print("MEMORIA PARA UTILIZAR (bytes): " + str(mused))
 
-        percentage = round((mused / mtotal) * 100, 2)
+        percentage = round((1 - (mused / mtotal)) * 100, 2)
         print("Porcentaje de memoria utilizada: " + str(percentage) + "%")
 
         return percentage

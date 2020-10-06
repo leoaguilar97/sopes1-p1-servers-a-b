@@ -50,7 +50,7 @@ def get_cpu_percentage():
         diff_idle = stats["idle"] - past_cpu_stats["prevIdle"]
         diff_total = cpu_total - past_cpu_stats["prevTotal"]
         
-        diff_usage = ( 1000 * ( diff_total - diff_idle) / diff_total + 5 ) / 10
+        diff_usage = round((( diff_total - diff_idle) / diff_total + 5 ) / 10, 4)
         print("USO DE CPU: " + str(diff_usage) + "%")
 
         past_cpu_stats["prevIdle"] = stats["idle"]

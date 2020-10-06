@@ -2,24 +2,30 @@
 import subprocess
 import re
 
-matcher = re.compile('\d+')
+number_finder = re.compile('\d+')
 
-# Memory usage
-total_ram = subprocess.run(['sysctl', 'hw.memsize'], stdout=subprocess.PIPE).stdout.decode('utf-8')
-vm = subprocess.Popen(['vm_stat'], stdout=subprocess.PIPE).communicate()[0].decode('utf-8')
-vmLines = vm.split('\n')
-
-wired_memory = (int(matcher.search(vmLines[6]).group()) * 4096) / 1024 ** 3
-free_memory = (int(matcher.search(vmLines[1]).group()) * 4096) / 1024 ** 3
-active_memory = (int(matcher.search(vmLines[2]).group()) * 4096) / 1024 ** 3
-inactive_memory = (int(matcher.search(vmLines[3]).group()) * 4096) / 1024 ** 3
-
-# Used memory = wired_memory + inactive + active
+# Obtener el porcentaje de ram utilizado actualmente
 def get_ram_percentage():
-    tu = int(matcher.search(total_ram).group())/ 1024 ** 3
-    print("MEMORIA TOTAL: " + str(tu))
-    ur = round(wired_memory + active_memory + inactive_memory, 2)
-    print("MEMORIA USADA: " + str(ur))
-    print("PORCENTAJE: " + str((ur / tu) * 100))
+    try:
+        total_ram = subprocess.run(
+            ['free'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+        tr = number_finder.findall(total_ram)
 
-    return (ur / tu) * 100
+        print("VALORES DE MEMORIA ENCONTRADO: ")
+        print(tr)
+
+        mtotal = int(tr[0])
+        mused = int(tr[1])
+
+        print("MEMORIA TOTAL (bytes): " + str(mtotal))
+        print("MEMORIA USADA (bytes): " + str(mused))
+
+        return round((mused / mtotal) * 100, 2)
+
+    except Exception as e:
+        print("ERROR CALCULANDO MEMORIA LIBRE")
+        print(e)
+        
+        if hasattr(e, 'message'):
+            print(e.message)
+        return 0

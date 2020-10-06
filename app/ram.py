@@ -1,26 +1,27 @@
 
-import subprocess
 import re
 
 number_finder = re.compile('\d+')
 
 # Obtener el porcentaje de ram utilizado actualmente
 def get_ram_percentage():
-    try:
-        total_ram = subprocess.run(
-            ['free'], stdout=subprocess.PIPE).stdout.decode('utf-8')
-        tr = number_finder.findall(total_ram)
+    try:        
+        file_content = ""
+        with open("/proc/meminfo", mode='r', encoding="utf-8") as mem_file:
+            file_content = mem_file.read()
+        
+        numbers = number_finder.findall(file_content)
 
-        print("VALORES DE MEMORIA ENCONTRADO: ")
-        print(tr)
-
-        mtotal = int(tr[0])
-        mused = int(tr[1])
+        mtotal = int(numbers[0])
+        mused = int(numbers[1])
 
         print("MEMORIA TOTAL (bytes): " + str(mtotal))
         print("MEMORIA USADA (bytes): " + str(mused))
 
-        return round((mused / mtotal) * 100, 2)
+        percentage = round((mused / mtotal) * 100, 2)
+        print("Porcentaje de memoria utilizada: " + str(percentage) + "%")
+
+        return percentage
 
     except Exception as e:
         print("ERROR CALCULANDO MEMORIA LIBRE")

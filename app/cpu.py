@@ -1,4 +1,3 @@
-import os
 import re
 
 number_finder = re.compile('\d+')
@@ -9,8 +8,6 @@ past_cpu_stats = {
 }
 
 # sumar todos los stats del cpu encontrados en procfile
-
-
 def get_cpu_stats_total(cpu_stats):
     try:
         return cpu_stats["user"] + cpu_stats["nice"] + cpu_stats["system"] + cpu_stats["idle"] + cpu_stats["iowait"] + cpu_stats["irq"] + cpu_stats["softirq"]
@@ -23,17 +20,13 @@ def get_cpu_stats_total(cpu_stats):
         return 1
 
 # obtener el porcentaje utilizado del CPU
-
-
 def get_cpu_percentage():
-    try:
-        proc_file = open("/proc/stat", mode="r", encoding="utf-8")
-        first_line = proc_file.readline()
-        print("PROC FILE: " + first_line)
-
+    try:        
+        first_line = ""
+        with open("/proc/stat", mode='r', encoding="utf-8") as proc_file:
+            first_line = proc_file.read()
+        
         numbers = number_finder.findall(first_line)
-        print("NUMEROS ENCONTRADOS: ")
-        print(numbers)
 
         stats = {
             "user": int(numbers[0]),
@@ -50,7 +43,8 @@ def get_cpu_percentage():
         diff_idle = stats["idle"] - past_cpu_stats["prevIdle"]
         diff_total = cpu_total - past_cpu_stats["prevTotal"]
         
-        diff_usage = round((( diff_total - diff_idle) / diff_total + 5 ) / 10, 4)
+        diff_usage = round(((diff_total - diff_idle) / diff_total) * 100, 4)
+        
         print("USO DE CPU: " + str(diff_usage) + "%")
 
         past_cpu_stats["prevIdle"] = stats["idle"]

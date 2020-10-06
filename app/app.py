@@ -6,8 +6,8 @@ from datetime import datetime
 import time
 from flask_cors import CORS
 
-from .cpu import get_cpu_percentage
-from .ram import get_ram_percentage
+import cpu
+import ram
 
 application = Flask(__name__)
 CORS(application)
@@ -29,8 +29,8 @@ def index():
 @application.route('/stats')
 def stats():
     stats = {
-        'cpu': get_cpu_percentage(),
-        'ram': get_ram_percentage(),
+        'cpu': cpu.get_cpu_percentage(),
+        'ram': ram.get_ram_percentage(),
         'docs': db.todo.count()
     }
 

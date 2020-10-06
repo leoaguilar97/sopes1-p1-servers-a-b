@@ -2,10 +2,12 @@ import os
 
 from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
-import psutil
 from datetime import datetime
 import time
 from flask_cors import CORS
+
+from .cpu import get_cpu_percentage
+from .ram import get_ram_percentage
 
 application = Flask(__name__)
 CORS(application)
@@ -17,9 +19,6 @@ application.config["MONGO_URI"] = 'mongodb://' + os.environ['MONGODB_USERNAME'] 
 mongo = PyMongo(application)
 db = mongo.db
 
-psutil.cpu_percent(interval=None)
-
-
 @application.route('/')
 def index():
     return jsonify(
@@ -27,49 +26,11 @@ def index():
         message='API FUNCIONANDO / SERVIDOR A Y B'
     )
 
-
 @application.route('/stats')
 def stats():
-    memory = psutil.virtual_memory()
-    """
-    THRESHOLD_KB = 1024                 # KB
-    THRESHOLD_MB = 1024 * 1024          # MB
-    THRESHOLD_GB = 1024 * 1024 * 1024   # GB
-
     stats = {
-        'cpu_freq_percpu': psutil.cpu_freq(percpu=True),
-        'cpu_freq': psutil.cpu_freq(percpu=False),
-        'cpu_stats': psutil.cpu_stats(),
-        'cpu_load_avg': psutil.getloadavg(),
-        'cpu_count_logical': psutil.cpu_count(),
-        'cpu_count_physical': psutil.cpu_count(logical=False),
-        'cpu_times_percent': psutil.cpu_times_percent(1, False),
-        'cpu_times_percent_percpu': psutil.cpu_times_percent(1, True),
-        'cpu_percent': psutil.cpu_percent(interval=None),
-        'cpu_percent_percpu': psutil.cpu_percent(interval=None, percpu=True),
-        'memory': {
-            'total_bytes': memory.total,
-            'total_kb': memory.total / THRESHOLD_KB,
-            'total_mb': memory.total / THRESHOLD_MB,
-            'total_gb': memory.total / THRESHOLD_GB,
-
-            'available_bytes': memory.available,
-            'available_kb': memory.available / THRESHOLD_KB,
-            'available_mb': memory.available / THRESHOLD_MB,
-            'available_gb': memory.available / THRESHOLD_GB,
-
-            'percentage': memory.percent,
-    
-            'used_bytes': memory.used,
-            'used_kb': memory.used / THRESHOLD_KB,
-            'used_mb': memory.used / THRESHOLD_MB,
-            'used_gb': memory.used / THRESHOLD_GB,
-        }
-    }
-    """
-    stats = {
-        'cpu': psutil.cpu_percent(interval=None),
-        'ram': memory.percent,
+        'cpu': get_cpu_percentage(),
+        'ram': get_ram_percentage(),
         'docs': db.todo.count()
     }
 
@@ -77,7 +38,6 @@ def stats():
         status=True,
         stats=stats
     )
-
 
 @application.route('/delete')
 def getDelete():

@@ -7,7 +7,6 @@ def get_cpu_percentage():
     try:
 
         print("CANTIDAD DE CPUS: " + str(cpus))
-    
         last_minute_load, l5, l15 = os.getloadavg()
         
         print("CPU LM: ")
@@ -15,7 +14,7 @@ def get_cpu_percentage():
 
         print("OS GETLOADAVG: ")
         print(os.getloadavg())
-        
+
         cpu_prctg = (last_minute_load / cpus) * 100
         print("CPU PERCENT: " + str(cpu_prctg))
 

@@ -18,7 +18,7 @@ def get_ram_percentage():
         print("MEMORIA TOTAL (bytes): " + str(mtotal))
         print("MEMORIA PARA UTILIZAR (bytes): " + str(mused))
 
-        percentage = round((1 - (mused / mtotal)) * 100, 2)
+        percentage = round((mused / mtotal) * 100, 2)
         print("Porcentaje de memoria utilizada: " + str(percentage) + "%")
 
         return percentage

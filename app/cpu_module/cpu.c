@@ -1,37 +1,36 @@
-// SPDX-License-Identifier: GPL-3.0
-#include <linux/kernel.h>  // printk(), pr_*()
-#include <linux/module.h>  // THIS_MODULE, MODULE_VERSION, ...
-#include <linux/init.h>    // module_{init,exit}()
-#include <linux/smp.h>     // get_cpu(), put_cpu()
-#include <linux/cpufreq.h> // cpufreq_get()
-#include <linux/cpumask.h> // cpumask_{first,next}(), cpu_online_mask
+#include <linux/module.h>
+#include <linux/kernel.h>
+#include <linux/init.h>
+#include <linux/cpufreq.h>
 
-#ifdef pr_fmt
-#undef pr_fmt
-#endif
-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+extern unsigned int arch_freq_get_on_cpu(int cpu);
 
-static int __init modinit(void)
+__weak unsigned int arch_freq_get_on_cpu(int cpu)
 {
-        unsigned cpu = cpumask_first(cpu_online_mask);
-
-        while (cpu < nr_cpu_ids) {
-                pr_info("CPU: %u, freq: %u kHz\n", cpu, cpufreq_get(cpu));
-                cpu = cpumask_next(cpu, cpu_online_mask);
-        }
-
-        return 0;
+  return 0;
 }
 
-static void __exit modexit(void)
-{
-        // Empty function only to be able to unload the module.
-        return;
+int __init freqmod_init(void) {
+  unsigned int f[2];
+  
+  printk(KERN_INFO "freqmod test init.\n");
+  
+  f[0] = arch_freq_get_on_cpu(0);
+  f[1] = cpufreq_get(0);
+  
+  printk(KERN_INFO "arch freq=%u, cpufreq driver freq=%u\n",f[0],f[1]); 
+  
+  return 0;
 }
 
-module_init(modinit);
-module_exit(modexit);
-MODULE_VERSION("0.1");
-MODULE_DESCRIPTION("Get CPU frequency for currently online CPUs.");
-MODULE_AUTHOR("Marco Bonelli");
+void __exit freqmod_exit(void) {
+
+  printk(KERN_INFO "freqmod test done.\n");
+}
+
+module_init(freqmod_init);
+module_exit(freqmod_exit);
+
 MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Test <test@example.com>");
+MODULE_DESCRIPTION("freqmod test");

@@ -22,47 +22,47 @@
 struct sysinfo i;
 int lru;
 
-
-static int my_proc_show(struct seq_file *m, void *v){
+static int show_cpu_percent(struct seq_file *m, void *v){
     #define K(x) ((x) << (PAGE_SHIFT - 10))
     si_meminfo(&i);
-    seq_printf(m,"%8lu-%8lu",K(i.totalram),K(i.freeram));    
+    seq_printf(m,"%8lu",K(i.freeram / i.totalram));   
     return 0;   
 }
 
-static ssize_t my_proc_write(struct file* file, const char __user *buffer, size_t count, loff_t *f_pos){
+static ssize_t write_file_proc(struct file* file, const char __user *buffer, size_t count, loff_t *f_pos){
     return 0;
 }
 
-static int my_proc_open(struct inode *inode, struct file *file){
-    return single_open(file, my_proc_show ,NULL);
+static int open_file_proc(struct inode *inode, struct file *file){
+    return single_open(file, show_cpu_percent ,NULL);
 }
 
 static struct file_operations my_fops = {
     .owner = THIS_MODULE,
-    .open = my_proc_open,
+    .open = open_file_proc,
     .release = single_release,
     .read = seq_read,
     .llseek = seq_lseek,
-    .write = my_proc_write
+    .write = write_file_proc
 };
 
-static int __init test_init(void){
+static int __init ram_read_percent_init(void){
     struct proc_dir_entry *entry;
     entry = proc_create("ram", 0777, NULL, &my_fops);
     if(!entry){
         return -1;
     } else {
-        printk(KERN_INFO "Inicio\n");
+        printk(KERN_INFO "Inicio RAM - Para llamar: cat /proc/ram\n");
     }
     return 0;
 }
 
-static void __exit test_exit(void){
+static void __exit ram_read_percent_exit(void){
     remove_proc_entry("ram", NULL);
-    printk(KERN_INFO "Final\n");
+    printk(KERN_INFO "Fin RAM\n");
 }
 
-module_init(test_init);
-module_exit(test_exit);
+module_init(ram_read_percent_init);
+module_exit(ram_read_percent_exit);
+
 MODULE_LICENSE("GPL");

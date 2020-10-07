@@ -8,3 +8,9 @@ all:
     
 clean:
     rm -f *.o *.ko *.mod.c Module.symvers modules.order
+
+test:
+ sudo dmesg -C
+ sudo insmod ram.ko
+ sudo rmmod ram.ko
+ dmesg

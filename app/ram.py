@@ -14,7 +14,7 @@ def get_ram_percentage():
 
         mtotal = int(numbers[1])
         mused = int(numbers[0])
-
+        print("** RAM UTILIZANDO MODULO KERNEL **")
         print("MEMORIA TOTAL (bytes): " + str(mtotal))
         print("MEMORIA PARA UTILIZAR (bytes): " + str(mused))
 

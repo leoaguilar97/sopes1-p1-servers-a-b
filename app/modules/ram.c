@@ -49,7 +49,7 @@ static struct file_operations my_fops = {
 
 static int __init test_init(void){
     struct proc_dir_entry *entry;
-    entry = proc_create("ram-module", 0777, NULL, &my_fops);
+    entry = proc_create("ram", 0777, NULL, &my_fops);
     if(!entry){
         return -1;
     } else {
@@ -59,7 +59,7 @@ static int __init test_init(void){
 }
 
 static void __exit test_exit(void){
-    remove_proc_entry("ram-module", NULL);
+    remove_proc_entry("ram", NULL);
     printk(KERN_INFO "Final\n");
 }
 

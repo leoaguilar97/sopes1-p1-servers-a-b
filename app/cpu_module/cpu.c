@@ -18,10 +18,10 @@ int __init freqmod_init(void) {
   f[0] = arch_freq_get_on_cpu(0);
   f[1] = cpufreq_get(0);
     
-  printk(KERN_ALERT ">> CPU Freq in KHz: %d\n", cpufreq_get(0) * 100000);
-  printk(KERN_ALERT ">> CPU Freq in KHz: %d\n", cpufreq_get(1) * 1000);
-  printk(KERN_ALERT ">> CPU Freq in KHz: %d\n", cpufreq_get(2));
-  printk(KERN_INFO "arch freq=%u, cpufreq driver freq=%u\n",f[0],f[1]); 
+  printk(KERN_ALERT ">> CPU Freq in KHz: %8lu\n", cpufreq_get(0) * 100000);
+  printk(KERN_ALERT ">> CPU Freq in KHz: %8lu\n", cpufreq_get(1) * 1000);
+  printk(KERN_ALERT ">> CPU Freq in KHz: %8lu\n", cpufreq_get(2));
+  printk(KERN_INFO "arch freq=%8lu, cpufreq driver freq=%8lu\n",f[0],f[1]); 
   
   return 0;
 }

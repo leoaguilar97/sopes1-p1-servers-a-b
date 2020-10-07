@@ -1,12 +1,6 @@
-ifneq ($(KERNELRELEASE),)
-obj-m   := ram_info.o
-else
-KDIR    := /lib/modules/$(shell uname -r)/build
-PWD     := $(shell pwd)
+  
+obj-m += ram.o
 all:
-        $(MAKE) -C $(KDIR) SUBDIRS=$(PWD) modules
-install:
-        $(MAKE) -C $(KDIR) SUBDIRS=$(PWD) modules_install
-%:
-        $(MAKE) -C $(KDIR) SUBDIRS=$(PWD) $@
-endif
+	make -C /lib/modules/$(shell uname -r)/build M=$(PWD)
+modulesclean:
+	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean

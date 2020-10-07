@@ -23,3 +23,8 @@ dentro de un contenedor de Docker.
 La API consultará la información de la base de datos y los archivos generados por los módulos cargados previamente, si otros servidores o servicios necesitan información sobre el rendimiento puede consultarlo a través de peticiones a esta API. 
 
 Para iniciarse ambos contenedores debe utilizarse Docker Compose.
+
+## REFERENCIAS
+
+* https://cloudaffaire.com/linux-commands-free/
+* http://www.linuxhowtos.org/System/procstat.htm

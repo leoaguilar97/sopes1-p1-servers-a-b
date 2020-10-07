@@ -8,7 +8,7 @@
 #include <linux/delay.h>
 #include <linux/compiler.h>
 #include <linux/gfp.h>
-#include <asm/system.h>
+//#include <asm/system.h>
 #include <mach/hardware.h>
 #include <linux/netdevice.h>
 #include <linux/clk.h>

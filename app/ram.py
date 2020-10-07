@@ -7,13 +7,13 @@ number_finder = re.compile('\d+')
 def get_ram_percentage():
     try:        
         file_content = ""
-        with open("/proc/meminfo", mode='r', encoding="utf-8") as mem_file:
+        with open("/proc/ram", mode='r', encoding="utf-8") as mem_file:
             file_content = mem_file.read()
         
         numbers = number_finder.findall(file_content)
 
-        mtotal = int(numbers[0])
-        mused = int(numbers[2])
+        mtotal = int(numbers[1])
+        mused = int(numbers[0])
 
         print("MEMORIA TOTAL (bytes): " + str(mtotal))
         print("MEMORIA PARA UTILIZAR (bytes): " + str(mused))

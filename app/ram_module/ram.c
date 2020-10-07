@@ -25,7 +25,7 @@ int lru;
 static int show_cpu_percent(struct seq_file *m, void *v){
     #define K(x) ((x) << (PAGE_SHIFT - 10))
     si_meminfo(&i);
-    seq_printf(m,"\nRAM:\n FRAM: %8lu\n TRAM: %8lu\n", K(i.freeram), K(i.totalram));   
+    seq_printf(m,"\nRAM:\n FREE RAM: %8lu\n TOTAL RAM: %8lu\n", K(i.freeram), K(i.totalram));   
     return 0;   
 }
 

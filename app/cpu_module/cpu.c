@@ -20,7 +20,6 @@ int __init freqmod_init(void) {
     
   printk(KERN_ALERT ">> CPU Freq in KHz: %8lu\n", cpufreq_get(0) * 100000);
   printk(KERN_ALERT ">> CPU Freq in KHz: %8lu\n", cpufreq_get(1) * 1000);
-  printk(KERN_ALERT ">> CPU Freq in KHz: %8lu\n", cpufreq_get(2));
   printk(KERN_INFO "arch freq=%8lu, cpufreq driver freq=%8lu\n",f[0],f[1]); 
   
   return 0;
